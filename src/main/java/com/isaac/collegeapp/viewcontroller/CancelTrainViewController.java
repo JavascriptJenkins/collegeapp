@@ -44,6 +44,9 @@ public class CancelTrainViewController {
         model.addAttribute("canceltrains", cancelTrainRepo.findAll());
         model.addAttribute("canceltrain", new CancelTrainVO());
 
+        model.addAttribute("canceltrainNewCancel", new CancelTrainVO());
+
+
 
 //        model.addAttribute("students", studentService.getAllStudentData());
         return "index.html";
@@ -69,8 +72,51 @@ public class CancelTrainViewController {
 
 
         model.addAttribute("canceltrain", new CancelTrainVO());
+        model.addAttribute("canceltrainNewCancel", new CancelTrainVO());
 
         model.addAttribute("canceltrains",cancelTrainRepo.findAll());
+
+
+        return "index.html";
+    }
+
+
+    @PostMapping("/newCancel")
+    String newCancel(@ModelAttribute( "canceltrainNewCancel" ) CancelTrainVO cancelTrainVO, Model model){
+
+
+        if(cancelTrainVO.getFname() != null
+        && cancelTrainVO.getLname() != null
+        && cancelTrainVO.getWhy() != null
+
+        ){
+
+            cancelTrainVO.setId(null);
+            cancelTrainVO.setUpvotes(0);
+            cancelTrainVO.setDownvotes(0);
+            cancelTrainVO.setImageurl("");
+            cancelTrainVO.setCancelstatus(0); // will be set to 1 to show in grid
+            cancelTrainVO.setUpdatedtimestamp(java.time.LocalTime.now());
+            cancelTrainVO.setCreatetimestamp(java.time.LocalTime.now());
+
+            cancelTrainRepo.save(cancelTrainVO);
+
+            model.addAttribute("successMessage", "Thank you for submitting a new cancel candidate!");
+
+            model.addAttribute("canceltrain", new CancelTrainVO());
+            model.addAttribute("canceltrainNewCancel", new CancelTrainVO());
+            model.addAttribute("canceltrains",cancelTrainRepo.findAll());
+
+        } else {
+            model.addAttribute("errorMessage", "Please fill out all data!");
+
+            model.addAttribute("canceltrain", new CancelTrainVO());
+            model.addAttribute("canceltrainNewCancel", new CancelTrainVO());
+            model.addAttribute("canceltrains",cancelTrainRepo.findAll());
+
+        }
+
+
 
 
         return "index.html";

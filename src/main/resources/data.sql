@@ -18,19 +18,19 @@ CREATE TABLE cancel_train (
 
 
 
-   INSERT INTO cancel_train (fname,
-                            lname,
-                            iscanceled,
-                            upvotes,
-                            downvotes,
-                            cancelstatus,
-                            why,
-                            imageurl,
-                            updatedtimestamp,
-                            createtimestamp) VALUES
-     ('Dave','Evans',true,20,10,10,'did something bad','/images/myimage1','1970-01-01 12:12:12','1970-01-01 12:12:12'),
-     ('Steve','Evans',false,30,10,30,'did something real bad','/images/myimage2','1970-01-01 12:12:12','1970-01-01 12:12:12'),
-     ('Alex','Evans',true,50,10,90,'did something extra bad','/images/myimage3','1970-01-01 12:12:12','1970-01-01 12:12:12');
+--   INSERT INTO cancel_train (fname,
+--                            lname,
+--                            iscanceled,
+--                            upvotes,
+--                            downvotes,
+--                            cancelstatus,
+--                            why,
+--                            imageurl,
+--                            updatedtimestamp,
+--                            createtimestamp) VALUES
+--     ('Dave','Evans',true,20,10,10,'did something bad','/images/myimage1','1970-01-01 12:12:12','1970-01-01 12:12:12'),
+--     ('Steve','Evans',false,30,10,30,'did something real bad','/images/myimage2','1970-01-01 12:12:12','1970-01-01 12:12:12'),
+--     ('Alex','Evans',true,50,10,90,'did something extra bad','/images/myimage3','1970-01-01 12:12:12','1970-01-01 12:12:12');
 
 -- INSERT INTO real_estate (fname,
 --                          lname,
