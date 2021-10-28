@@ -31,12 +31,12 @@
 		</dependency>
 
 		<!-- this is needed to connect to mysql database-->
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<scope>runtime</scope>
-			<version>8.0.13</version>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>mysql</groupId>-->
+<!--			<artifactId>mysql-connector-java</artifactId>-->
+<!--			<scope>runtime</scope>-->
+<!--			<version>8.0.13</version>-->
+<!--		</dependency>-->
 
 
 		<dependency>
@@ -65,6 +65,20 @@
 			<version>2.4.0</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-devtools -->
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-devtools</artifactId>-->
+<!--			<version>2.5.5</version>-->
+<!--		</dependency>-->
+
+
 
 	</dependencies>
 
@@ -74,6 +88,27 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<!--			This will clean the database -->
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>3.1.0</version>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>data</directory>
+							<includes>
+								<include>**.mv.db</include>
+							</includes>
+<!--							<excludes>-->
+<!--								<exclude>**/important.log</exclude>-->
+<!--								<exclude>**/another-important.log</exclude>-->
+<!--							</excludes>-->
+							<followSymlinks>false</followSymlinks>
+						</fileset>
+					</filesets>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
