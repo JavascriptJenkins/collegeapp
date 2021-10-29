@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -82,7 +84,7 @@ public class CancelTrainViewController {
         model.addAttribute("canceltrains",calculateProgressBars());
 
 
-        return "index.html";
+        return "redirect:/";
     }
 
 
@@ -124,7 +126,7 @@ public class CancelTrainViewController {
 
 
 
-        return "index.html";
+        return "redirect:/";
     }
 
 
@@ -217,7 +219,13 @@ public class CancelTrainViewController {
             }
             cancelTrainVO.setProgressbar(progress);
         }
-        return cancelTrainVOList;
+
+
+
+        // this will sort based on progress bar value desc
+        return cancelTrainVOList.stream()
+                .sorted(Comparator.comparing(CancelTrainVO::getProgressbar).reversed())
+                .collect(Collectors.toList());
 
     }
 
