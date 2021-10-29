@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,8 +42,11 @@ public class CancelTrainViewController {
     @GetMapping
     String viewHomePage(Model model){
 
+
+        List<CancelTrainVO> cancelTrainVOList = calculateProgressBars();
+
 //        controllerHelper.checkForLoggedInStudent(model, httpServletRequest); // this will check to see if a student has already loggede in
-        model.addAttribute("canceltrains", cancelTrainRepo.findAll());
+        model.addAttribute("canceltrains", cancelTrainVOList);
         model.addAttribute("canceltrain", new CancelTrainVO());
 
         model.addAttribute("canceltrainNewCancel", new CancelTrainVO());
@@ -74,7 +79,7 @@ public class CancelTrainViewController {
         model.addAttribute("canceltrain", new CancelTrainVO());
         model.addAttribute("canceltrainNewCancel", new CancelTrainVO());
 
-        model.addAttribute("canceltrains",cancelTrainRepo.findAll());
+        model.addAttribute("canceltrains",calculateProgressBars());
 
 
         return "index.html";
@@ -112,7 +117,7 @@ public class CancelTrainViewController {
 
             model.addAttribute("canceltrain", new CancelTrainVO());
             model.addAttribute("canceltrainNewCancel", new CancelTrainVO());
-            model.addAttribute("canceltrains",cancelTrainRepo.findAll());
+            model.addAttribute("canceltrains",calculateProgressBars());
 
         }
 
@@ -194,6 +199,26 @@ public class CancelTrainViewController {
         }
 
         return "newStudent.html";
+    }
+
+
+    List<CancelTrainVO> calculateProgressBars(){
+
+        List<CancelTrainVO> cancelTrainVOList = cancelTrainRepo.findByOrderByUpvotesDesc();
+
+        // set progress bar value
+        for(CancelTrainVO cancelTrainVO : cancelTrainVOList){
+
+            int progress = 0;
+            if(cancelTrainVO.getDownvotes() >= cancelTrainVO.getUpvotes()){
+                progress = 0;
+            } else {
+                progress = cancelTrainVO.getUpvotes() - Math.abs(cancelTrainVO.getDownvotes());
+            }
+            cancelTrainVO.setProgressbar(progress);
+        }
+        return cancelTrainVOList;
+
     }
 
 

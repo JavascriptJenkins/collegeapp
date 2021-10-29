@@ -9,6 +9,9 @@ import java.util.List;
 @Repository
 public interface CancelTrainRepo extends CrudRepository<CancelTrainVO, Long> {
 
-        List<CancelTrainRepo> findByLname(String lname);
+        List<CancelTrainVO> findByLname(String lname);
+
+        List<CancelTrainVO> findByOrderByUpvotesDesc();
+
 
 }

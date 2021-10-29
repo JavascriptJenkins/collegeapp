@@ -50,12 +50,24 @@ public class CancelTrainVO {
     @Transient
     int incomingVote;
 
+    @JsonProperty
+    @Transient
+    int progressbar;
+
     public int getIncomingVote() {
         return incomingVote;
     }
 
     public void setIncomingVote(int incomingVote) {
         this.incomingVote = incomingVote;
+    }
+
+    public int getProgressbar() {
+        return progressbar;
+    }
+
+    public void setProgressbar(int progressbar) {
+        this.progressbar = progressbar;
     }
 
 

@@ -72,7 +72,7 @@
                                     <td>
                                         <div class="progress progress-xs">
 
-                                            <div class="progress-bar progress-bar-danger" th:style="'width:'+@{${canceltrain.upvotes}-${canceltrain.downvotes}}+'%;'"></div>
+                                            <div class="progress-bar progress-bar-danger" th:style="'width:'+@{${canceltrain.progressbar}}+'%;'"></div>
                                         </div>
                                     </td>
                                     <td>
@@ -119,36 +119,6 @@
     </form>
 
 
-
-<!--    <img src="https://media.istockphoto.com/photos/hanging-out-on-campus-picture-id1295133466" class="d-block w-100" alt="...">-->
-
-
-
-<!--    <div th:if="${loggedInUserName == null}" class="container">-->
-<!--        <h1>Please login below.</h1>-->
-
-<!--        <form th:action="@{/home/login}" th:object="${student}" method="post">-->
-
-<!--            <div class="alert alert-danger" role="alert" th:if="${errorMessage}" th:text="${errorMessage}">Error</div>-->
-<!--            <div class="alert alert-info" role="alert" th:if="${successMessage}" th:text="${successMessage}">Success</div>-->
-
-<!--            <div class="row">-->
-
-<!--                <div class="col">-->
-<!--                    <input type="text" th:field="*{studentName}" class="form-control" placeholder="Student Name" aria-label="Student Name">-->
-<!--                </div>-->
-
-<!--                <div class="col">-->
-<!--                    <input type="text" th:field="*{studentIDNumber}" class="form-control" placeholder="Student Id Number" aria-label="Student Id Number">-->
-<!--                </div>-->
-
-
-<!--            </div>-->
-
-<!--            <button style="margin-top:5px;" type="submit" class="btn btn-primary">Submit</button>-->
-
-<!--        </form>-->
-<!--    </div>-->
 
 
 
