@@ -17,6 +17,14 @@ CREATE TABLE cancel_train (
   );
 
 
+CREATE TABLE token (
+    id INT AUTO_INCREMENT  PRIMARY KEY,
+    token VARCHAR(250) NOT NULL,
+    usermetadata VARCHAR(250) NOT NULL,
+    tokenused INT NOT NULL,
+    updatedtimestamp TIMESTAMP NOT NULL,
+    createtimestamp TIMESTAMP NOT NULL
+);
 
 --   INSERT INTO cancel_train (fname,
 --                            lname,

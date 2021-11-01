@@ -15,44 +15,43 @@ public class CancelTrainVO {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonProperty
     Long id;
-
     @JsonProperty
     String fname;
-
     @JsonProperty
     String lname;
-
     @JsonProperty
     boolean iscanceled;
-
     @JsonProperty
     int upvotes;
-
     @JsonProperty
     int downvotes;
-
     @JsonProperty
     int cancelstatus;
-
     @JsonProperty
     String why;
-
     @JsonProperty
     String imageurl;
-
     @JsonProperty
     java.time.LocalTime updatedtimestamp;
-
     @JsonProperty
     java.time.LocalTime createtimestamp;
-
     @JsonProperty
     @Transient
     int incomingVote;
-
     @JsonProperty
     @Transient
     int progressbar;
+    @JsonProperty
+    @Transient
+    String email;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public int getIncomingVote() {
         return incomingVote;

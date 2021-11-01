@@ -39,13 +39,6 @@
 
 <div class="container">
 
-    <!--<table>-->
-    <!--    <tr th:each="professor : ${professors}">-->
-    <!--        <td th:text="${professor.professor_id}"></td>-->
-    <!--        <td th:text="${professor.professor_name}"></td>-->
-    <!--        <td th:text="${professor.hire_date}"></td>-->
-    <!--    </tr>-->
-    <!--</table>-->
 
     <form th:action="@{/vote}" th:object="${canceltrain}" method="post">
         <div class="page-content page-container" id="page-content">
@@ -124,32 +117,6 @@
 
 </div>
 
-<div class="container" th:if="${successMessage} == null">
-    <form th:action="@{/newCancel}" th:object="${canceltrainNewCancel}" method="post">
-
-        <div class="alert alert-danger" role="alert" th:if="${errorMessage}" th:text="${errorMessage}">Error</div>
-        <div class="alert alert-info" role="alert" th:if="${successMessage}" th:text="${successMessage}">Success</div>
-
-        <div class="mb-3">
-            <label for="inputFName" class="form-label">First Name</label>
-            <input th:field="*{fname}" type="text" class="form-control" id="inputFName" aria-describedby="emailHelp">
-<!--            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>-->
-        </div>
-        <div class="mb-3">
-            <label for="inputLName" class="form-label">Last Name</label>
-            <input th:field="*{lname}" type="text" class="form-control" id="inputLName">
-        </div>
-
-        <div class="mb-3">
-            <label for="inputWhy" class="form-label">Why?</label>
-            <input th:field="*{why}" type="text" class="form-control" id="inputWhy">
-            <div id="whyHelp" class="form-text">Why should this person be canceled?</div>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-
-</div>
 
 
 </body>

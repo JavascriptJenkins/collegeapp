@@ -1,8 +1,11 @@
 package com.isaac.collegeapp.viewcontroller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.isaac.collegeapp.email.EmailManager;
 import com.isaac.collegeapp.h2model.CancelTrainVO;
+import com.isaac.collegeapp.h2model.TokenVO;
 import com.isaac.collegeapp.jparepo.CancelTrainRepo;
+import com.isaac.collegeapp.jparepo.TokenRepo;
 import com.isaac.collegeapp.model.StudentDAO;
 import com.isaac.collegeapp.service.StudentService;
 import com.isaac.collegeapp.util.ControllerHelper;
@@ -14,6 +17,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +44,14 @@ public class CancelTrainViewController {
     @Autowired
     CancelTrainRepo cancelTrainRepo;
 
+    @Autowired
+    TokenRepo tokenRepo;
+
+    SecureRandom secureRandom = new SecureRandom();
+
+    @Autowired
+    EmailManager emailManager;
+
 
     //default home mapping
     @GetMapping
@@ -51,12 +64,30 @@ public class CancelTrainViewController {
         model.addAttribute("canceltrains", cancelTrainVOList);
         model.addAttribute("canceltrain", new CancelTrainVO());
 
-        model.addAttribute("canceltrainNewCancel", new CancelTrainVO());
+//        model.addAttribute("canceltrainNewCancel", new CancelTrainVO());
 
 
 
 //        model.addAttribute("students", studentService.getAllStudentData());
         return "index.html";
+    }
+
+    @GetMapping("/requestcancel")
+    String requestcancel(Model model){
+
+        model.addAttribute("canceltrainNewCancel", new CancelTrainVO());
+
+//        model.addAttribute("students", studentService.getAllStudentData());
+        return "requestcancel.html";
+    }
+
+    @GetMapping("/token")
+    String token(Model model){
+
+        model.addAttribute("canceltrain", new CancelTrainVO());
+
+//        model.addAttribute("students", studentService.getAllStudentData());
+        return "token.html";
     }
 
 
@@ -88,6 +119,60 @@ public class CancelTrainViewController {
     }
 
 
+    @PostMapping("/requesttoken")
+    String requesttoken(@ModelAttribute( "canceltrain" ) TokenVO tokenVO, Model model){
+
+
+        if(tokenVO.getEmail() != null &&
+                tokenVO.getEmail().contains("@")){
+
+
+            // todo: send cancel token
+            TokenVO newToken = new TokenVO();
+
+            //generate token and send email
+            newToken.setTokenused(0);
+            newToken.setUsermetadata(tokenVO.getEmail()); // todo: hash this email
+            newToken.setEmail(tokenVO.getEmail()); // todo: hash this email
+            newToken.setToken(String.valueOf(secureRandom.nextInt(100000)));
+            newToken.setUpdatedtimestamp(java.time.LocalTime.now());
+            newToken.setCreatetimestamp(java.time.LocalTime.now());
+
+
+            //todo: send email before saving
+            try{
+                ArrayList<String> list = new ArrayList<String>(1);
+                list.add(newToken.getEmail());
+                StringBuilder sb = new StringBuilder();
+                sb.append("Here is your voting token: ");
+                sb.append(newToken.getToken());
+                sb.append(". ");
+                sb.append("Use it within 24 hours to cast a vote on https://www.canceltrain.com");
+
+                emailManager.generateAndSendEmail(sb.toString(), list, "Voting token from Cancel Train!");
+            } catch (Exception ex){
+                model.addAttribute("errorMessage", "Error sending email!");
+                model.addAttribute("canceltrain", new CancelTrainVO());
+                return "token.html";
+
+            } finally{
+                tokenRepo.save(newToken);
+            }
+
+
+            model.addAttribute("successMessage", "Thank you for requesting a cancel token!  It will only be valid for 24 hours and one vote!");
+
+            model.addAttribute("canceltrain", new CancelTrainVO());
+
+
+        } else {
+            model.addAttribute("errorMessage", "Please enter a valid email address!");
+            model.addAttribute("canceltrain", new CancelTrainVO());
+        }
+
+        return "token.html";
+    }
+
     @PostMapping("/newCancel")
     String newCancel(@ModelAttribute( "canceltrainNewCancel" ) CancelTrainVO cancelTrainVO, Model model){
 
@@ -106,8 +191,10 @@ public class CancelTrainViewController {
             cancelTrainVO.setUpdatedtimestamp(java.time.LocalTime.now());
             cancelTrainVO.setCreatetimestamp(java.time.LocalTime.now());
 
+            //todo:add validation so same people are not added twice on refresh or on purpose
             cancelTrainRepo.save(cancelTrainVO);
 
+            //todo: add a link so people can be directed back home
             model.addAttribute("successMessage", "Thank you for submitting a new cancel candidate!");
 
             model.addAttribute("canceltrain", new CancelTrainVO());
@@ -126,7 +213,7 @@ public class CancelTrainViewController {
 
 
 
-        return "redirect:/";
+        return "requestcancel.html";
     }
 
 
