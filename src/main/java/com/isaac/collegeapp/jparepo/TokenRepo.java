@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface TokenRepo extends CrudRepository<TokenVO, Long> {
 
+    TokenVO findByToken(String token);
+
 }

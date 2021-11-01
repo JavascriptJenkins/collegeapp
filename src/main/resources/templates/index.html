@@ -103,6 +103,14 @@
                     </div>
                 </div>
             </div>
+
+            <div class="alert alert-danger" role="alert" th:if="${errorMessage}" th:text="${errorMessage}">Error</div>
+
+            <label for="token" class="form-label">Vote Token</label>
+            <input th:field="*{token}" type="text" class="form-control" id="token">
+            <div id="tokenHelp" class="form-text">Paste token here (Request a token first)</div>
+
+
         </div>
     </div>
 

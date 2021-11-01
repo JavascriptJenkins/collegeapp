@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.SecureRandom;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -94,18 +96,42 @@ public class CancelTrainViewController {
     @PostMapping("/vote")
     String vote(@ModelAttribute( "canceltrain" ) CancelTrainVO cancelTrainVO, Model model){
 
-        if(cancelTrainVO.getIncomingVote() ==0){
-            Optional<CancelTrainVO> existing = cancelTrainRepo.findById(cancelTrainVO.getId());
 
-            existing.get().setDownvotes(existing.get().getDownvotes() - 1);
-            cancelTrainRepo.save(existing.get());
+        //check to see if the token is valid and has not expired
+        TokenVO tokenVO = tokenRepo.findByToken(cancelTrainVO.getToken());
+        if(tokenVO != null
+        && (LocalDateTime.now().isBefore(tokenVO.getCreatetimestamp().plusHours(24))) // only allow tokens made within past 24 hours
+                && tokenVO.getTokenused() < 1 // only allow 1 votes per token
+        ){
 
-        } else if(cancelTrainVO.getIncomingVote() ==1){
-            Optional<CancelTrainVO> existing = cancelTrainRepo.findById(cancelTrainVO.getId());
-            existing.get().setUpvotes(existing.get().getUpvotes() + 1);
-            cancelTrainRepo.save(existing.get());
 
+            if(cancelTrainVO.getIncomingVote() ==0){
+                Optional<CancelTrainVO> existing = cancelTrainRepo.findById(cancelTrainVO.getId());
+
+                existing.get().setDownvotes(existing.get().getDownvotes() - 1);
+                cancelTrainRepo.save(existing.get());
+
+            } else if(cancelTrainVO.getIncomingVote() ==1){
+                Optional<CancelTrainVO> existing = cancelTrainRepo.findById(cancelTrainVO.getId());
+                existing.get().setUpvotes(existing.get().getUpvotes() + 1);
+                cancelTrainRepo.save(existing.get());
+            }
+
+
+            // now we have to increment the token to isUsed == 1
+            tokenVO.setTokenused(1);
+            tokenRepo.save(tokenVO);
+        } else {
+            model.addAttribute("errorMessage", "Insert valid token below before voting. ");
+            model.addAttribute("canceltrain", new CancelTrainVO());
+            model.addAttribute("canceltrainNewCancel", new CancelTrainVO());
+
+            model.addAttribute("canceltrains",calculateProgressBars());
+
+            return "index.html";
         }
+
+
 
 
 
@@ -135,8 +161,8 @@ public class CancelTrainViewController {
             newToken.setUsermetadata(tokenVO.getEmail()); // todo: hash this email
             newToken.setEmail(tokenVO.getEmail()); // todo: hash this email
             newToken.setToken(String.valueOf(secureRandom.nextInt(100000)));
-            newToken.setUpdatedtimestamp(java.time.LocalTime.now());
-            newToken.setCreatetimestamp(java.time.LocalTime.now());
+            newToken.setUpdatedtimestamp(java.time.LocalDateTime.now());
+            newToken.setCreatetimestamp(java.time.LocalDateTime.now());
 
 
             //todo: send email before saving
@@ -147,7 +173,7 @@ public class CancelTrainViewController {
                 sb.append("Here is your voting token: ");
                 sb.append(newToken.getToken());
                 sb.append(". ");
-                sb.append("Use it within 24 hours to cast a vote on https://www.canceltrain.com");
+                sb.append("Use it within 24 hours to cast votes on https://www.canceltrain.com");
 
                 emailManager.generateAndSendEmail(sb.toString(), list, "Voting token from Cancel Train!");
             } catch (Exception ex){
@@ -188,8 +214,8 @@ public class CancelTrainViewController {
             cancelTrainVO.setDownvotes(0);
             cancelTrainVO.setImageurl("");
             cancelTrainVO.setCancelstatus(0); // will be set to 1 to show in grid
-            cancelTrainVO.setUpdatedtimestamp(java.time.LocalTime.now());
-            cancelTrainVO.setCreatetimestamp(java.time.LocalTime.now());
+            cancelTrainVO.setUpdatedtimestamp(java.time.LocalDateTime.now());
+            cancelTrainVO.setCreatetimestamp(java.time.LocalDateTime.now());
 
             //todo:add validation so same people are not added twice on refresh or on purpose
             cancelTrainRepo.save(cancelTrainVO);

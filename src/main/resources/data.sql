@@ -22,8 +22,8 @@ CREATE TABLE token (
     token VARCHAR(250) NOT NULL,
     usermetadata VARCHAR(250) NOT NULL,
     tokenused INT NOT NULL,
-    updatedtimestamp TIMESTAMP NOT NULL,
-    createtimestamp TIMESTAMP NOT NULL
+    updatedtimestamp DATE NOT NULL,
+    createtimestamp DATE NOT NULL
 );
 
 --   INSERT INTO cancel_train (fname,

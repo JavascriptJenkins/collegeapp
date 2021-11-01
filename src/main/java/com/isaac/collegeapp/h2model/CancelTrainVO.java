@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
@@ -31,10 +32,13 @@ public class CancelTrainVO {
     String why;
     @JsonProperty
     String imageurl;
+
+
+
     @JsonProperty
-    java.time.LocalTime updatedtimestamp;
+    java.time.LocalDateTime updatedtimestamp;
     @JsonProperty
-    java.time.LocalTime createtimestamp;
+    java.time.LocalDateTime createtimestamp;
     @JsonProperty
     @Transient
     int incomingVote;
@@ -44,6 +48,18 @@ public class CancelTrainVO {
     @JsonProperty
     @Transient
     String email;
+
+    @JsonProperty
+    @Transient
+    String token;
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     public String getEmail() {
         return email;
@@ -142,21 +158,22 @@ public class CancelTrainVO {
         this.imageurl = imageurl;
     }
 
-    public LocalTime getUpdatedtimestamp() {
+    public LocalDateTime getUpdatedtimestamp() {
         return updatedtimestamp;
     }
 
-    public void setUpdatedtimestamp(LocalTime updatedtimestamp) {
+    public void setUpdatedtimestamp(LocalDateTime updatedtimestamp) {
         this.updatedtimestamp = updatedtimestamp;
     }
 
-    public LocalTime getCreatetimestamp() {
+    public LocalDateTime getCreatetimestamp() {
         return createtimestamp;
     }
 
-    public void setCreatetimestamp(LocalTime createtimestamp) {
+    public void setCreatetimestamp(LocalDateTime createtimestamp) {
         this.createtimestamp = createtimestamp;
     }
+
 
 
 
